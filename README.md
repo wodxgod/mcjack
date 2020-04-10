@@ -13,8 +13,6 @@ You can use my token stealer tool to obtain a target's session token. You can fi
 2. Install the required Python modules via: `pip install -r requirements.txt` inside the cloned repository directory
 3. Run the command: `py mcjack.py <session token>` to inject the new launcher profile to your Minecraft launcher
 
-<br>
-
 # Author
 - **wodx**
     - [Twitter](https://twitter.com/wodxgod)

