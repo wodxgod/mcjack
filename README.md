@@ -4,7 +4,7 @@
     <img src="https://raw.githubusercontent.com/WodxTV/mcjack/master/preview.png">
 </p>
 
-mcjack is a Minecraft session hijack tool, that makes you able to login to a user's account using only  their latest session token.
+mcjack is a Minecraft session hijack tool, that makes you able to login to a user's account via their latest session token.
 
 You can use my token stealer tool to obtain a target's session token. You can find it [here](https://github.com/WodxTV/Minecraft-Session-Token-Stealer)
 
