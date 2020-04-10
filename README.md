@@ -8,8 +8,6 @@ mcjack is a Minecraft session hijack tool, that makes you able to login to a use
 
 You can use my token stealer tool to obtain a target's session token. You can find it [here](https://github.com/WodxTV/Minecraft-Session-Token-Stealer)
 
-<br>
-
 # Installation
 1. Clone the repository to your machine
 2. Install the required Python modules via: `pip install -r requirements.txt` inside the cloned repository directory
