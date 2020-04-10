@@ -100,9 +100,9 @@ def main():
         
         uuid, sid, unix = get_data(token)
 
-        if not validate_time(unix):
-            print_error(f"Session token has expired")
-            return
+        #if not validate_time(unix):
+        #    print_error(f"Session token has expired")
+        #    return
 
         name = get_name(uuid)
 
