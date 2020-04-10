@@ -16,13 +16,13 @@ def get_time():
     return time.strftime("%H:%M:%S")
     
 def print_error(message):
-    print(f"[{get_time()}] {Fore.RED}[error] {Fore.WHITE}{message}{Fore.RESET}")
+    print(f"[{get_time()}] {Fore.RED}[error] {Fore.RESE}{message}{Fore.RESET}")
 
 def print_info(message):
-    print(f"[{get_time()}] {Fore.BLUE}[info] {Fore.WHITE}{message}{Fore.RESET}")
+    print(f"[{get_time()}] {Fore.BLUE}[info] {Fore.RESE}{message}{Fore.RESET}")
 
 def print_success(message):
-    print(f"[{get_time()}] {Fore.GREEN}[success] {Fore.WHITE}{message}{Fore.RESET}")
+    print(f"[{get_time()}] {Fore.GREEN}[success] {Fore.RESE}{message}{Fore.RESET}")
 
 def validate_token(token):
     if len(token) != 308:
@@ -56,8 +56,8 @@ def main():
 {0} 8   8   8 `Y8P   8 `Y88 `Y8P 8 Yb  {2}v1.0.0
 {0}                wdP
 
- {3}www.twitter.com/wodxgod{0} - {5}www.youtube.com/wodxgod{0} - {6}www.github.com/WodXTV
-    {4}""".format(Fore.LIGHTBLACK_EX, Fore.WHITE, Fore.RED, Fore.GREEN, Fore.RESET, Fore.YELLOW, Fore.CYAN))
+ {3}www.twitter.com/wodxgod{0} - {4}www.youtube.com/wodxgod{0} - {5}www.github.com/WodXTV
+    {1}""".format(Fore.LIGHTBLACK_EX, Fore.RESET, Fore.RED, Fore.GREEN, Fore.YELLOW, Fore.CYAN))
 
     try:
         token = argv[1]
