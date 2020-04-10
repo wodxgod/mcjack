@@ -57,7 +57,7 @@ def get_name(uuid):
         pass
 
 def get_data(token):
-    """ returns session ID and UUID """
+    """ returns session ID, UUID and expiration date in unix epoch time format """
     parts = token.split(".")
     data = json.loads(base64.b64decode(f"{parts[1]}=".encode()).decode())
     return (data["spr"], data["sub"], data["exp"])
