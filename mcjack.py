@@ -16,13 +16,13 @@ def get_time():
     return time.strftime("%H:%M:%S")
     
 def print_error(message):
-    print(f"[{get_time()}] {Fore.RED}[error] {Fore.RESE}{message}{Fore.RESET}")
+    print(f"[{get_time()}] {Fore.RED}[error] {Fore.RESET}{message}{Fore.RESET}")
 
 def print_info(message):
-    print(f"[{get_time()}] {Fore.BLUE}[info] {Fore.RESE}{message}{Fore.RESET}")
+    print(f"[{get_time()}] {Fore.BLUE}[info] {Fore.RESET}{message}{Fore.RESET}")
 
 def print_success(message):
-    print(f"[{get_time()}] {Fore.GREEN}[success] {Fore.RESE}{message}{Fore.RESET}")
+    print(f"[{get_time()}] {Fore.GREEN}[success] {Fore.RESET}{message}{Fore.RESET}")
 
 def validate_token(token):
     if len(token) != 308:
@@ -51,8 +51,8 @@ def main():
 
     print(r"""
 {0}                  w           8           
-{0} 8d8b.d8b. .d8b   w .d88 .d8b 8.dP            {1}A Minecraft session hijacking
-{0} 8P Y8P Y8 8      8 8  8 8    88b             {1}tool written in Python 3 by {2}wodx{1}.
+{0} 8d8b.d8b. .d8b   w .d88 .d8b 8.dP            {1}A Minecraft session hijack tool
+{0} 8P Y8P Y8 8      8 8  8 8    88b             {1}written in Python 3 by {2}wodx{1}.
 {0} 8   8   8 `Y8P   8 `Y88 `Y8P 8 Yb  {2}v1.0.0
 {0}                wdP
 
