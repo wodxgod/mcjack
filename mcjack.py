@@ -8,11 +8,21 @@ import sys
 
 from colorama import Fore, init
 
-__version__ = '1.1.1'
+__version__ = '1.2.0'
 
 # constants
 APPDATA = os.getenv("APPDATA")
 PATH = os.path.join(APPDATA, ".minecraft\\launcher_profiles.json")
+
+BANNER = r"""
+{0}                  w           8           
+{0} 8d8b.d8b. .d8b   w .d88 .d8b 8.dP           {1}A Minecraft session hijack tool
+{0} 8P Y8P Y8 8      8 8  8 8    88b            {1}written in Python 3 by {2}wodx{1}.
+{0} 8   8   8 `Y8P   8 `Y88 `Y8P 8 Yb {2}v%s
+{0}                wdP
+
+ {3}www.twitter.com/wodxgod{0} - {4}www.youtube.com/wodxgod{0} - {5}www.github.com/WodXTV
+    {1}""".format(Fore.LIGHTBLACK_EX, Fore.RESET, Fore.RED, Fore.GREEN, Fore.YELLOW, Fore.CYAN) % __version__
 
 # print functions
 def print_error(message):
@@ -73,15 +83,7 @@ def inject(profile):
 def main():
     init(convert=True)
 
-    print(r"""
-{0}                  w           8           
-{0} 8d8b.d8b. .d8b   w .d88 .d8b 8.dP            {1}A Minecraft session hijack tool
-{0} 8P Y8P Y8 8      8 8  8 8    88b             {1}written in Python 3 by {2}wodx{1}.
-{0} 8   8   8 `Y8P   8 `Y88 `Y8P 8 Yb  {2}%s
-{0}                wdP
-
- {3}www.twitter.com/wodxgod{0} - {4}www.youtube.com/wodxgod{0} - {5}www.github.com/WodXTV
-    {1}""".format(Fore.LIGHTBLACK_EX, Fore.RESET, Fore.RED, Fore.GREEN, Fore.YELLOW, Fore.CYAN) % __version__)
+    print(BANNER)
 
     try:
         token = sys.argv[1]
